@@ -1,5 +1,6 @@
 ﻿using Behaviorable.Attributes;
 using Behaviorable.Behaviors;
+using Behaviorable.Business;
 using Behaviorable.Businesses.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -57,7 +58,7 @@ namespace MvcMovie.Models.Behaviorable.Behaviors.EntityFramework
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
-        public override bool? BeforeSave(Poco toSave)
+        public override bool? BeforeSave(Poco toSave, BusinessParameters parameters)
         {
             toSave.Slug = "";
             foreach(string propertyName in SluggedProperties)
@@ -97,13 +98,13 @@ namespace MvcMovie.Models.Behaviorable.Behaviors.EntityFramework
 
         public Poco FindBySlug(string slug)
         {
-            return this.FindBySlug(new Dictionary<string, dynamic>() {
+            return this.FindBySlug(new BusinessParameters() {
                 { "slug", slug }
             }).FirstOrDefault();
         }
 
         [BusinessFind("slug")]
-        public IQueryable<Poco> FindBySlug(IDictionary<string, dynamic> parameters)
+        public IQueryable<Poco> FindBySlug(BusinessParameters parameters)
         {  
             if(!parameters.Keys.Contains("slug"))
             {

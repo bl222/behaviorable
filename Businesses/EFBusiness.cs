@@ -38,24 +38,29 @@ namespace Behaviorable.Businesses.EntityFramework
 
 
 
-        public virtual T Find(int id)
+        public virtual T Find(int id, BusinessParameters parameters = null)
         {
-            return this.FindFirst("id", new Dictionary<string, dynamic> { {"id", id } });
+            if(parameters == null)
+            {
+                parameters = new BusinessParameters();
+            }
+            parameters["id"] = id;
+            return this.FindFirst("id", parameters);
         }
 
-        public virtual bool Delete(int id)
+        public virtual bool Delete(int id, BusinessParameters parameters = null)
         {
             var toDelete = this.Find(id);
 
             if (toDelete != null)
             {
-                return this.Delete(toDelete);
+                return this.Delete(toDelete, parameters);
             }
             return false;
         }
 
         [BusinessFind("all")]
-        public virtual IQueryable<T> DefaultFind(IDictionary<string, dynamic> parameters)
+        public virtual IQueryable<T> DefaultFind(BusinessParameters parameters)
         {
 
             IQueryable<T> target = Table;
@@ -83,7 +88,7 @@ namespace Behaviorable.Businesses.EntityFramework
 
 
         [BusinessFind("id")]
-        public IQueryable<T> IdFind(IDictionary<string, dynamic> parameters)
+        public IQueryable<T> IdFind(BusinessParameters parameters)
         {
             var table = (IEnumerable<dynamic>)Table;
             int id = parameters["id"];
@@ -92,7 +97,7 @@ namespace Behaviorable.Businesses.EntityFramework
         }
 
 
-        protected override bool SaveHelper(T toSave)
+        protected override bool SaveHelper(T toSave, BusinessParameters parameters = null)
         {
             dynamic toSaveTmp = toSave;
             if (toSaveTmp.ID == null)
@@ -109,7 +114,7 @@ namespace Behaviorable.Businesses.EntityFramework
             return true;
         }
 
-        protected override bool DeleteHelper(T toDelete)
+        protected override bool DeleteHelper(T toDelete, BusinessParameters parameters = null)
         {
             Table.Remove(toDelete);
             Db.SaveChanges();

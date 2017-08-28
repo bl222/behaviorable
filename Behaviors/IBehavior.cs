@@ -7,21 +7,22 @@ using System.Threading.Tasks;
 using Behaviorable.Attributes;
 using Behaviorable.Businesses.EntityFramework;
 using MvcMovie.Models.Behaviorable.Behaviors.EntityFramework;
+using Behaviorable.Business;
 
 namespace Behaviorable.Behaviors
 {
     public interface IBehavior<T>
     {
-        IQueryable<T> BeforeFind(string type, dynamic parameters, IQueryable<T> results = null);
+        IQueryable<T> BeforeFind(string type, BusinessParameters parameters, IQueryable<T> results = null);
         //D BeforeFindOne(string type, dynamic parameters);
-        IQueryable<T> AfterFind(string type, dynamic parameters, IQueryable<T> results = null);
+        IQueryable<T> AfterFind(string type, BusinessParameters parameters, IQueryable<T> results = null);
         //bool AfterFindOne(string type, dynamic parameters);
 
-        bool? BeforeSave(T toSave);
-        bool? AfterSave(T toSave);
+        bool? BeforeSave(T toSave, BusinessParameters parameters);
+        bool? AfterSave(T toSave, BusinessParameters parameters);
 
-        bool? BeforeDelete(T toDelete);
-        bool? AfterDelete(T toDelete);
+        bool? BeforeDelete(T toDelete, BusinessParameters parameters);
+        bool? AfterDelete(T toDelete, BusinessParameters parameters);
 
     }
 
@@ -31,30 +32,30 @@ namespace Behaviorable.Behaviors
 
 
         }
-        public virtual IQueryable<T> BeforeFind(string type, dynamic parameters, IQueryable<T> results = null)
+        public virtual IQueryable<T> BeforeFind(string type, BusinessParameters parameters, IQueryable<T> results = null)
         {
             return results;
         }
 
-        public virtual IQueryable<T> AfterFind(string type, dynamic parameters, IQueryable<T> results = null)
+        public virtual IQueryable<T> AfterFind(string type, BusinessParameters parameters, IQueryable<T> results = null)
         {
             return results;
         }
 
-        public virtual bool? BeforeSave(T toSave)
+        public virtual bool? BeforeSave(T toSave, BusinessParameters parameters)
         {
             return true;
         }
-        public virtual bool? AfterSave(T toSave)
+        public virtual bool? AfterSave(T toSave, BusinessParameters parameters)
         {
             return true;
         }
 
-        public virtual bool? BeforeDelete(T toDelete)
+        public virtual bool? BeforeDelete(T toDelete, BusinessParameters parameters)
         {
             return true;
         }
-        public virtual bool? AfterDelete(T toDelete)
+        public virtual bool? AfterDelete(T toDelete, BusinessParameters parameters)
         {
             
             return true;

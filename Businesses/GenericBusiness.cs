@@ -8,10 +8,12 @@ using Behaviorable.Behaviors;
 
 namespace Behaviorable.Businesses
 {
-    public delegate bool? SaveBehaviorDelegate<T>(T toSave);
-    public delegate bool? DeleteBehaviorDelegate<T>(T toSave);
-    public delegate IQueryable<T> FindBehaviorDelegate<T>(string type, IDictionary<string, dynamic> parameters, IQueryable<T> results = null);
-    public delegate IQueryable<T> FindDelegate<T>(IDictionary<string, dynamic> parameters);
+    public delegate bool? SaveBehaviorDelegate<T>(T toSave, BusinessParameters parameters = null);
+    public delegate bool? DeleteBehaviorDelegate<T>(T toSave, BusinessParameters parameters = null);
+    public delegate IQueryable<T> FindBehaviorDelegate<T>(string type, BusinessParameters parameters, IQueryable<T> results = null);
+    public delegate IQueryable<T> FindDelegate<T>(BusinessParameters parameters);
+
+
 
     public abstract class GenericBusiness<T> : IBusiness<T>
     {
@@ -35,6 +37,8 @@ namespace Behaviorable.Businesses
             
             this.InitBehaviors();
         }
+
+  
 
         protected void InitCustomFinders(object target)
         {
@@ -89,7 +93,7 @@ namespace Behaviorable.Businesses
 
         } 
 
-        public IQueryable<T> Find(string type = "all", IDictionary<string, dynamic> parameters = null)
+        public IQueryable<T> Find(string type = "all", BusinessParameters parameters = null)
         {
             IQueryable<T> results;
             foreach (FindBehaviorDelegate <T> bf in _beforeFinds)
@@ -116,18 +120,18 @@ namespace Behaviorable.Businesses
             return results as IQueryable<T>;
         }
 
-        public virtual T FindFirst(string type, IDictionary<string, dynamic> parameters = null)
+        public virtual T FindFirst(string type, BusinessParameters parameters = null)
         {
             return (this.Find(type, parameters) as IQueryable<T>).FirstOrDefault();
         }
 
 
-        public bool Save(T toSave)
+        public bool Save(T toSave, BusinessParameters parameters = null)
         {
             bool interruptSave = false;
             foreach(SaveBehaviorDelegate<T> bs in _beforeSaves)
             {
-                bool? result = bs(toSave);
+                bool? result = bs(toSave, parameters);
                 if (result == false)
                 {
                     return false;
@@ -139,7 +143,7 @@ namespace Behaviorable.Businesses
 
             if(!interruptSave)
             {
-                if (!SaveHelper(toSave))
+                if (!SaveHelper(toSave, parameters))
                 {
                     return false;
                 }
@@ -148,7 +152,7 @@ namespace Behaviorable.Businesses
             interruptSave = false;
             foreach (SaveBehaviorDelegate<T> asd in _afterSaves)
             {
-                bool? success = asd(toSave);
+                bool? success = asd(toSave, parameters);
 
                 if(success == false)
                 {
@@ -164,12 +168,12 @@ namespace Behaviorable.Businesses
         }
 
 
-        public bool Delete(T toDelete)
+        public bool Delete(T toDelete, BusinessParameters parameters = null)
         {
             bool interruptDelete = false;
             foreach (DeleteBehaviorDelegate<T> bd in _beforeDeletes)
             {
-                bool? result = bd(toDelete);
+                bool? result = bd(toDelete, parameters);
                 if (result == false)
                 {
                     return false;
@@ -181,7 +185,7 @@ namespace Behaviorable.Businesses
 
             if(!interruptDelete)
             {
-                if (!DeleteHelper(toDelete))
+                if (!DeleteHelper(toDelete, parameters))
                 {
                     return false;
                 }
@@ -190,7 +194,7 @@ namespace Behaviorable.Businesses
             interruptDelete = false;
             foreach (DeleteBehaviorDelegate<T> ad in _afterDeletes)
             {
-                bool? result = ad(toDelete);
+                bool? result = ad(toDelete, parameters);
 
                 if(result == false)
                 {
@@ -206,8 +210,8 @@ namespace Behaviorable.Businesses
 
        
 
-        protected abstract bool SaveHelper(T toSave);
+        protected abstract bool SaveHelper(T toSave, BusinessParameters parameters = null);
 
-        protected abstract bool DeleteHelper(T toDelete);
+        protected abstract bool DeleteHelper(T toDelete, BusinessParameters parameters = null);
     }
 }

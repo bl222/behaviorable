@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Behaviorable.Business;
 
 namespace Behaviorable.Behaviors.EntityFramework
 {
@@ -18,7 +19,7 @@ namespace Behaviorable.Behaviors.EntityFramework
             
         }
 
-       public override bool? BeforeSave(Poco toSave)
+       public override bool? BeforeSave(Poco toSave, BusinessParameters parameters)
         {
             if(toSave.ID == null)
             {
