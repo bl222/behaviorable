@@ -1,13 +1,18 @@
 ﻿using Behaviorable.Businesses.EntityFramework;
-using MvcMovie.Models.Behaviorable.Behaviors.EntityFramework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Behaviorable.Business;
+using Behaviorable.Businesses;
 
 namespace Behaviorable.Behaviors.EntityFramework
 {
+
+    public interface ITimeStampable
+    {
+        DateTime? CreatedAt { get; set; }
+        DateTime? ModifiedAt { get; set; }
+
+    }
+
     public class TimeStampableBehavior<Poco, Db, Business> : EFBehavior<Poco, Db, Business>
         where Poco : class, IBasePoco, ITimeStampable
         where Db : System.Data.Entity.DbContext

@@ -1,18 +1,16 @@
-﻿using Behaviorable.Business;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Behaviorable.Attributes;
 using Behaviorable.Behaviors;
 
 namespace Behaviorable.Businesses
 {
-    public delegate bool? SaveBehaviorDelegate<T>(T toSave, BusinessParameters parameters = null);
-    public delegate bool? DeleteBehaviorDelegate<T>(T toSave, BusinessParameters parameters = null);
+    public delegate bool? SaveBehaviorDelegate<T>(T toSave, BusinessParameters parameters);
+    public delegate bool? DeleteBehaviorDelegate<T>(T toSave, BusinessParameters parameters);
     public delegate IQueryable<T> FindBehaviorDelegate<T>(string type, BusinessParameters parameters, IQueryable<T> results = null);
     public delegate IQueryable<T> FindDelegate<T>(BusinessParameters parameters);
-
 
 
     public abstract class GenericBusiness<T> : IBusiness<T>

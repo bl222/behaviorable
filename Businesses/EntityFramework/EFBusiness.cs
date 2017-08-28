@@ -1,13 +1,9 @@
 ﻿using Behaviorable.Attributes;
-using Behaviorable.Behaviors;
-using Behaviorable.Business;
-using MvcMovie.Models;
-using MvcMovie.Models.Behaviorable.Behaviors.EntityFramework;
+using Behaviorable.Behaviors.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
 
 namespace Behaviorable.Businesses.EntityFramework
 {

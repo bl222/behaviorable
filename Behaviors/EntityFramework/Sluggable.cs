@@ -1,17 +1,20 @@
 ﻿using Behaviorable.Attributes;
-using Behaviorable.Behaviors;
-using Behaviorable.Business;
+using Behaviorable.Businesses;
 using Behaviorable.Businesses.EntityFramework;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 
-namespace MvcMovie.Models.Behaviorable.Behaviors.EntityFramework
+namespace Behaviorable.Behaviors.EntityFramework
 {
+
+    public interface ISluggable
+    {
+        string Slug { get; set; }
+    }
+
     public class SluggableBehavior<Poco, Db, Business> : EFBehavior<Poco, Db, Business>
         where Poco : class, IBasePoco, ISluggable
         where Db : System.Data.Entity.DbContext
