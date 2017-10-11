@@ -5,6 +5,13 @@ using System.Linq;
 
 namespace Behaviorable.Behaviors
 {
+    /// <summary>
+    /// Instead of creating a behavior class by implementing the IBehavior interface, it is possible to inherit
+    /// from the BaseBehavior class. BaseBehavior is there for convenience, it implements all the callbacks defined in
+    /// the IBehavior interace as empty methods so when a class inherit from BaseBehavior, you only have to write the code
+    /// for the callbacks you wish to implement. In other words, inheriting from BaseBehavoir means that 
+    /// </summary>
+    /// <typeparam name="T">The type of data managed by the business to which the behavior is attached</typeparam>
     public class BaseBehavior<T> : IBehavior<T>
     {
         public BaseBehavior()
@@ -43,19 +50,5 @@ namespace Behaviorable.Behaviors
         }
 
 
-    }
-
-    public class EFBehavior<Poco, Db, Business> : BaseBehavior<Poco>
-        where Poco : class, IBasePoco
-        where Db : System.Data.Entity.DbContext
-        where Business : EFBusiness<Poco, Db>
-
-    {
-        protected Business business { get; set; }
-
-        public EFBehavior(Business b)
-        {
-            business = b;
-        }
     }
 }

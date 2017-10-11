@@ -5,14 +5,18 @@ using System.Web;
 
 namespace Behaviorable.Attributes
 {
+    /// <summary>
+    /// An attribued used to define a custom find in a business or behavior. Simply attach this
+    /// attribute to the custom find method and specify a type
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class BusinessFind : Attribute
     {
-        public string Name { get; set; }
+        public string Type { get; set; }
 
-        public BusinessFind(string name)
+        public BusinessFind(string type)
         {
-            Name = name;   
+            Type = type;   
         }
 
 
